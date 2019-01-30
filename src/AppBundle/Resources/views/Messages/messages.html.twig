@@ -1,0 +1,45 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+<h1>Messages</h1>
+<a class=" btn btn-primary btn-sm" href=" {{path ('post_message') }}"  role="button">Poster un message</a>
+{% for message in messages |reverse %}
+    <div class="row"> 
+        <div class="card" style="width: 50rem;">
+            <div class="card-body">
+                 <p class="card-text" >{{ message.content|e }} </p>
+                {% if message.user.id==app.user.id %}
+                    <a class="card-link" href="{{ path('supprimer_message', { 'id' : message.id }) }}">Supprimer</a>
+                     <p>
+                        <a class="card-link" data-toggle="collapse" href="#a{{ message.id }}"  aria-expanded="false" aria-controls="collapseExample">
+                            Afficher les likes
+                        </a>
+                    </p>
+                    <div class="collapse" id="a{{ message.id }}">
+                        <div class="card card-body">
+                            {{message.likes|join(', ' )}}
+                        </div>
+                    </div>
+                {% else %}
+                    <a class="card-link" href="{{ path('like_message', { 'id' : message.id }) }}" >Like</a>
+                    <p>
+                        <a class="card-link" data-toggle="collapse" href="#a{{ message.id }}"  aria-expanded="false" aria-controls="collapseExample">
+                            Afficher les likes
+                        </a>
+                    </p>
+                    <div class="collapse" id="a{{ message.id }}">
+                        <div class="card card-body">
+                            {{message.likes|join(', ' )}}
+                        </div>
+                    </div>
+                {% endif %}  
+                <p class="card-text">par: {{ message.user.username }} </p>
+                <p class="card-text">creé à : {{ message.createdAt|date }} </p>
+            </div>
+        </div>       
+    </div>
+{% endfor %}
+
+{% endblock %}
